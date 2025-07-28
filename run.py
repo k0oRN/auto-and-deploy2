@@ -3,7 +3,7 @@ import os
 from datetime import datetime, timedelta
 
 import pandas as pd
-from yahoo_fin.stock_info import get_data
+import yfinance as yf
 
 from pgdb import PGDatabase
 
@@ -24,11 +24,12 @@ if os.path.exists(SALES_PATH):
 
 historical_d = {}
 for company in COMPANIES:
-    historical_d[company] = get_data(
+    historical_d[company] = yf.download(
         company,
-        start_date=(datetime.today() - timedelta(days=1)).strftime("%m/%d/%Y"),
-        end_date=datetime.today().strftime("%m/%d/%Y"),
+        start=(datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d"),
+        end=datetime.today().strftime("%Y-%m-%d"),
     ).reset_index()
+    historical_d[company]["ticker"] = company  # Добавим тикер, если он нужен в БД
 
 
 database = PGDatabase(
@@ -45,5 +46,5 @@ for i, row in sales_df.iterrows():
 
 for company, data in historical_d.items():
     for i, row in data.iterrows():
-        query = f"insert into stock values ('{row['index']}', '{row['ticker']}', {row['open']}, {row['close']})"
+        query = f"insert into stock values ('{row['Date']}', '{row['ticker']}', {row['Open']}, {row['Close']})"
         database.post(query)
