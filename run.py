@@ -27,7 +27,7 @@ for company in COMPANIES:
     historical_d[company] = yf.download(
         company,
         start=(datetime.today() - timedelta(days=7)).strftime("%Y-%m-%d"),
-        end_date = (datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d"),
+        end_date=(datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d"),
     ).reset_index()
     historical_d[company]["ticker"] = company  # Добавим тикер, если он нужен в БД
 
