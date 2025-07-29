@@ -1,6 +1,5 @@
 import psycopg2
 
-
 class PGDatabase:
     def __init__(self, host, database, user, password):
         self.host = host
