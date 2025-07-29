@@ -84,7 +84,7 @@ except Exception as e:
 
 # Загрузка sales
 for _, row in sales_df.iterrows():
-    query = "INSERT INTO finance.sales (dt, company, transaction_type, amount) VALUES (%s, %s, %s, %s)"
+    query = "INSERT INTO sales (dt, company, transaction_type, amount) VALUES (%s, %s, %s, %s)"
     try:
         values = (datetime.strptime(row['dt'], "%d-%m-%Y").date(), row['company'], row['transaction_type'], row['amount'])
         database.post(query, values)
@@ -94,7 +94,7 @@ for _, row in sales_df.iterrows():
 # Загрузка stock
 for company, data in historical_d.items():
     for _, row in data.iterrows():
-        query = "INSERT INTO finance.stock (date, ticker, open, close) VALUES (%s, %s, %s, %s)"
+        query = "INSERT INTO stock (date, ticker, open, close) VALUES (%s, %s, %s, %s)"
         try:
             values = (row['Date'].date(), row['ticker'], float(row['Open']), float(row['Close']))
             database.post(query, values)
