@@ -21,4 +21,9 @@ class PGDatabase:
         try:
             self.cursor.execute(query, args)
         except Exception as err:
-            print(repr(err))
+            print(f"Database error: {repr(err)}")
+            raise  # Повторно вызываем исключение, чтобы оно обрабатывалось в вызывающем коде
+
+    def __del__(self):
+        self.cursor.close()
+        self.connection.close()
